@@ -42,14 +42,14 @@ window.addEventListener('unhandledrejection', (event) => {
 const config = {
   type: Phaser.AUTO,
   parent: 'game-container',
-  width: GAME_WIDTH,
-  height: GAME_HEIGHT,
+  width: window.innerWidth || GAME_WIDTH,
+  height: window.innerHeight || GAME_HEIGHT,
   backgroundColor: '#1a0a2e',
   scale: {
-    mode: Phaser.Scale.FIT,
+    mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: GAME_WIDTH,
-    height: GAME_HEIGHT,
+    width: window.innerWidth || GAME_WIDTH,
+    height: window.innerHeight || GAME_HEIGHT,
   },
   scene: [BootScene, GameScene],
   render: {
