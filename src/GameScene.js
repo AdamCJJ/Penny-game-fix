@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { ITEM_COUNT, CATEGORIES, OUTLINE_COLOR } from './constants.js';
+import { ITEM_COUNT, CATEGORIES } from './constants.js';
 import { SoundManager } from './SoundManager.js';
 import { SaveManager } from './SaveManager.js';
 import { Confetti } from './Confetti.js';
@@ -76,7 +76,7 @@ export class GameScene extends Phaser.Scene {
 
       const spark = this.add.graphics();
       spark.fillStyle(colors[i % colors.length], 0.8);
-      spark.fillStar(0, 0, 4, 3, 8, 0);
+      spark.fillPoints(this._createSparklePoints(4, 3, 8), true);
       spark.x = sx;
       spark.y = sy;
       spark.setDepth(6);
@@ -94,6 +94,22 @@ export class GameScene extends Phaser.Scene {
         ease: 'Sine.easeInOut',
       });
     }
+  }
+
+  _createSparklePoints(points, innerRadius, outerRadius) {
+    const sparklePoints = [];
+    const step = Math.PI / points;
+
+    for (let i = 0; i < points * 2; i++) {
+      const radius = i % 2 === 0 ? outerRadius : innerRadius;
+      const angle = i * step - Math.PI / 2;
+      sparklePoints.push({
+        x: Math.cos(angle) * radius,
+        y: Math.sin(angle) * radius,
+      });
+    }
+
+    return sparklePoints;
   }
 
   // ── Button bar ──
