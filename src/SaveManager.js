@@ -1,6 +1,11 @@
-import { SAVE_KEY } from './constants.js';
+import { SAVE_KEY, ITEM_COUNT } from './constants.js';
 
 const DEFAULTS = { outfit: 0, wings: 0, crown: 0, background: 0 };
+
+function normalizeValue(value, fallback) {
+  if (!Number.isInteger(value)) return fallback;
+  return ((value % ITEM_COUNT) + ITEM_COUNT) % ITEM_COUNT;
+}
 
 export class SaveManager {
   constructor() {
@@ -13,7 +18,12 @@ export class SaveManager {
       const raw = localStorage.getItem(SAVE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
-        this._state = { ...DEFAULTS, ...parsed };
+        this._state = Object.fromEntries(
+          Object.entries(DEFAULTS).map(([key, fallback]) => [
+            key,
+            normalizeValue(parsed?.[key], fallback),
+          ]),
+        );
       }
     } catch {
       this._state = { ...DEFAULTS };

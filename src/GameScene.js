@@ -212,11 +212,22 @@ export class GameScene extends Phaser.Scene {
   }
 
   _bounceItem(target) {
+    const baseScaleX = target.scaleX;
+    const baseScaleY = target.scaleY;
+
     this.tweens.add({
       targets: target,
-      scaleX: 1.18, scaleY: 1.18,
+      scaleX: baseScaleX * 1.18,
+      scaleY: baseScaleY * 1.18,
       duration: 120, ease: 'Back.easeOut', yoyo: true,
-      onComplete: () => { this.tweens.add({ targets: target, scaleX: 1, scaleY: 1, duration: 80 }); },
+      onComplete: () => {
+        this.tweens.add({
+          targets: target,
+          scaleX: baseScaleX,
+          scaleY: baseScaleY,
+          duration: 80,
+        });
+      },
     });
   }
 
@@ -319,9 +330,11 @@ export class GameScene extends Phaser.Scene {
     const gear = this.add.image(gx, 30, 'gear_icon')
       .setDisplaySize(38, 38).setDepth(20)
       .setInteractive({ useHandCursor: true });
+    const baseScaleX = gear.scaleX;
+    const baseScaleY = gear.scaleY;
 
-    gear.on('pointerover', () => gear.setScale(1.15));
-    gear.on('pointerout', () => gear.setScale(1));
+    gear.on('pointerover', () => gear.setScale(baseScaleX * 1.15, baseScaleY * 1.15));
+    gear.on('pointerout', () => gear.setScale(baseScaleX, baseScaleY));
     gear.on('pointerdown', () => this._showResetDialog());
 
     this.tweens.add({ targets: gear, angle: 360, duration: 6000, repeat: -1, ease: 'Linear' });
