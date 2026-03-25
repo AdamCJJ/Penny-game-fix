@@ -17,6 +17,16 @@ function fillStar(g, x, y, size, color) {
   }
 }
 
+function strokePath(g, points) {
+  if (points.length < 2) return;
+  g.beginPath();
+  g.moveTo(points[0].x, points[0].y);
+  for (let i = 1; i < points.length; i++) {
+    g.lineTo(points[i].x, points[i].y);
+  }
+  g.strokePath();
+}
+
 export function generateBackgrounds(scene) {
   const bgs = [
     { sky: [0x87CEEB, 0xFFE4B5], clouds: true, rainbow: true, stars: false, ground: 0x90EE90 },
@@ -253,8 +263,16 @@ export function generateBooCat(scene) {
   g.beginPath(); g.moveTo(cx,cy+2); g.lineTo(cx+8,cy+8); g.strokePath();
   g.lineStyle(1.5, 0x888888, 0.8);
   [[-1,1],[-1,-1],[1,1],[1,-1]].forEach(([dx,dy]) => { g.beginPath(); g.moveTo(cx+dx*5,cy+1); g.lineTo(cx+dx*30,cy+dy*5); g.strokePath(); });
-  g.lineStyle(5, 0xF5D7A5, 1); g.beginPath(); g.moveTo(cx+26,cy+25); g.bezierCurveTo(cx+55,cy+10,cx+65,cy+35,cx+48,cy+42); g.strokePath();
-  g.lineStyle(2, OUTLINE_COLOR, 0.6); g.beginPath(); g.moveTo(cx+26,cy+25); g.bezierCurveTo(cx+55,cy+10,cx+65,cy+35,cx+48,cy+42); g.strokePath();
+  const tailPoints = [
+    { x: cx + 26, y: cy + 25 },
+    { x: cx + 40, y: cy + 18 },
+    { x: cx + 53, y: cy + 16 },
+    { x: cx + 60, y: cy + 28 },
+    { x: cx + 54, y: cy + 39 },
+    { x: cx + 48, y: cy + 42 },
+  ];
+  g.lineStyle(5, 0xF5D7A5, 1); strokePath(g, tailPoints);
+  g.lineStyle(2, OUTLINE_COLOR, 0.6); strokePath(g, tailPoints);
   g.fillStyle(0xFF4B64, 1); g.fillRect(cx-18,cy+20,36,8);
   g.lineStyle(1.5, OUTLINE_COLOR, 1); g.strokeRect(cx-18,cy+20,36,8);
   g.fillStyle(0xFFE400, 1); g.fillCircle(cx,cy+28,5); g.lineStyle(1, OUTLINE_COLOR, 1); g.strokeCircle(cx,cy+28,5);
